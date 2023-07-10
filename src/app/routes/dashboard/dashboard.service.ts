@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+// Importa el servicio
 
 export interface PeriodicElement {
   name: string;
@@ -54,8 +55,8 @@ const MESSAGES = [
   },
 ];
 
-@Injectable()
-export class DashboardService {
+//@Injectable()
+export class DashboardService implements OnInit {
   stats = [
     {
       title: 'Total Sales',
@@ -186,7 +187,10 @@ export class DashboardService {
     },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private dashboardService: DashboardService) {}
+  ngOnInit() {
+    this.dashboardService;
+  }
 
   getData() {
     return ELEMENT_DATA;
@@ -203,4 +207,12 @@ export class DashboardService {
   getStats() {
     return this.stats;
   }
+
+
+
+
+
+
+
+
 }
