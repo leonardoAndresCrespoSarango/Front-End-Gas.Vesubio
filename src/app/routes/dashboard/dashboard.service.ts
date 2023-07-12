@@ -1,5 +1,11 @@
-import {Injectable, OnInit} from '@angular/core';
+import {ElementRef, Injectable, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
+import { ViewChild } from '@angular/core';
+import {Chart} from "chart.js";
+
+// Importa el servicio
+
 // Importa el servicio
 
 export interface PeriodicElement {
@@ -55,8 +61,8 @@ const MESSAGES = [
   },
 ];
 
-//@Injectable()
-export class DashboardService implements OnInit {
+@Injectable()
+export class DashboardService{
   stats = [
     {
       title: 'Total Sales',
@@ -187,10 +193,13 @@ export class DashboardService implements OnInit {
     },
   ];
 
-  constructor(private http: HttpClient,private dashboardService: DashboardService) {}
-  ngOnInit() {
-    this.dashboardService;
+  constructor(private http: HttpClient) {
+
   }
+ // @ViewChild('myChart', { static: true }) myChartCanvas?: ElementRef;
+
+
+
 
   getData() {
     return ELEMENT_DATA;
@@ -207,12 +216,4 @@ export class DashboardService implements OnInit {
   getStats() {
     return this.stats;
   }
-
-
-
-
-
-
-
-
 }
