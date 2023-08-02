@@ -8,43 +8,6 @@
 
     },
     {
-      "route": "design",
-      "name": "design",
-      "type": "sub",
-      "icon": "color_lens",
-      "children": [
-        {
-          "route": "colors",
-          "name": "colors",
-          "type": "link"
-        },
-        {
-          "route": "icons",
-          "name": "icons",
-          "type": "link"
-        }
-      ],
-      "permissions": {
-        "only": [
-          "ADMIN",
-          "MANAGER"
-        ]
-      }
-    },
-    {
-      "route": "media",
-      "name": "media",
-      "type": "sub",
-      "icon": "image",
-      "children": [
-        {
-          "route": "gallery",
-          "name": "gallery",
-          "type": "link"
-        }
-      ]
-    },
-    {
       "route": "tables",
       "name": "tables",
       "type": "sub",
@@ -54,25 +17,12 @@
           "route": "kitchen-sink",
           "name": "kitchen-sink",
           "type": "link"
-        },
-        {
-          "route": "remote-data",
-          "name": "remote-data",
-          "type": "link"
         }
       ],
       "permissions": {
         "except": "GUEST"
       }
-    },
-    {
-      "route": "https://ng-matero.github.io/extensions/",
-      "name": "extensions",
-      "type": "extTabLink",
-      "icon": "extension",
-      "permissions": {
-        "only": "ADMIN"
-      }
     }
+
   ]
 }

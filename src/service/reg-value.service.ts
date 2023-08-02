@@ -15,6 +15,10 @@ export class RegValueService {
     return this.httpClient.post<any>("http://localhost:8080/values/saveValue",registerValue);
 
   }
+
+  uploadData(formData: FormData): Observable<any> {
+    return this.httpClient.post<any>('http://localhost:8080/values/Import', formData);
+  }
 //metodo get para buscar por ID
   findValueById(ID: number | bigint):Observable<any[]>{
     return this.httpClient.get<RegisterValue[]>("http://localhost:8080/values/findDateById/"+ID);

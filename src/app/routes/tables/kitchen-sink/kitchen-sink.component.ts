@@ -4,6 +4,11 @@ import { MtxGridColumn } from '@ng-matero/extensions/grid';
 import { TranslateService } from '@ngx-translate/core';
 import { TablesDataService } from '../data.service';
 import { TablesKitchenSinkEditComponent } from './edit/edit.component';
+import {RegValueService} from "../../../../service/reg-value.service";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {catchError} from "rxjs/operators";
+import {NgxFileDropEntry} from "ngx-file-drop";
 
 @Component({
   selector: 'app-table-kitchen-sink',
@@ -13,170 +18,70 @@ import { TablesKitchenSinkEditComponent } from './edit/edit.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TablesKitchenSinkComponent implements OnInit {
-  columns: MtxGridColumn[] = [
-    {
-      header: this.translate.stream('table_kitchen_sink.position'),
-      field: 'position',
-      sortable: true,
-      minWidth: 100,
-      width: '100px',
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.name'),
-      field: 'name',
-      sortable: true,
-      disabled: true,
-      minWidth: 100,
-      width: '100px',
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.weight'),
-      field: 'weight',
-      minWidth: 100,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.symbol'),
-      field: 'symbol',
-      minWidth: 100,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.gender'),
-      field: 'gender',
-      minWidth: 100,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.mobile'),
-      field: 'mobile',
-      hide: true,
-      minWidth: 120,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.tele'),
-      field: 'tele',
-      minWidth: 120,
-      width: '120px',
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.birthday'),
-      field: 'birthday',
-      minWidth: 180,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.city'),
-      field: 'city',
-      minWidth: 120,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.address'),
-      field: 'address',
-      minWidth: 180,
-      width: '200px',
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.company'),
-      field: 'company',
-      minWidth: 120,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.website'),
-      field: 'website',
-      minWidth: 180,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.email'),
-      field: 'email',
-      minWidth: 180,
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.operation'),
-      field: 'operation',
-      minWidth: 160,
-      width: '160px',
-      pinned: 'right',
-      type: 'button',
-      buttons: [
-        {
-          type: 'icon',
-          icon: 'edit',
-          tooltip: this.translate.stream('table_kitchen_sink.edit'),
-          click: record => this.edit(record),
-        },
-        {
-          color: 'warn',
-          icon: 'delete',
-          text: this.translate.stream('table_kitchen_sink.delete'),
-          tooltip: this.translate.stream('table_kitchen_sink.delete'),
-          pop: {
-            title: this.translate.stream('table_kitchen_sink.confirm_delete'),
-            closeText: this.translate.stream('table_kitchen_sink.close'),
-            okText: this.translate.stream('table_kitchen_sink.ok'),
-          },
-          click: record => this.delete(record),
-        },
-      ],
-    },
-  ];
-  list: any[] = [];
-  isLoading = true;
-
-  multiSelectable = true;
-  rowSelectable = true;
-  hideRowSelectionCheckbox = false;
-  showToolbar = true;
-  columnHideable = true;
-  columnSortable = true;
-  columnPinnable = true;
-  rowHover = false;
-  rowStriped = false;
-  showPaginator = true;
-  expandable = false;
-  columnResizable = false;
-
+  selectedFile: File | null = null;
   constructor(
-    private translate: TranslateService,
-    private dataSrv: TablesDataService,
-    private dialog: MtxDialog,
-    private cdr: ChangeDetectorRef
+    private httpClient: HttpClient,
+    private regValueService: RegValueService
   ) {}
-
   ngOnInit() {
-    this.list = this.dataSrv.getData();
-    this.isLoading = false;
   }
+  /*onFileDropped($event: File[]) {
+    const selectedFile: File = $event[0];
 
-  edit(value: any) {
-    const dialogRef = this.dialog.originalOpen(TablesKitchenSinkEditComponent, {
-      width: '600px',
-      data: { record: value },
+    if (!selectedFile) {
+      console.error('No file selected.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    console.log('File name:', selectedFile.name);
+    console.log('File extension:', selectedFile.name.split('.').pop());
+
+    const headers = new HttpHeaders({
+      'enctype': 'multipart/form-data' // Configura el encabezado adecuadamente
     });
 
-    dialogRef.afterClosed().subscribe(() => console.log('The dialog was closed'));
+    this.httpClient.post('http://localhost:8080/values/Import', formData, { headers }).subscribe(
+      response => {
+        console.log('File uploaded successfully:', response);
+      },
+      error => {
+        console.error('Error uploading file:', error);
+      }
+    );
+  }*/
+  onFileDropped(files: NgxFileDropEntry[]) {
+    for (const droppedFile of files) {
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.handleFile(file);
+        });
+      }
+    }
   }
 
-  delete(value: any) {
-    this.dialog.alert(`You have deleted ${value.position}!`);
-  }
+  handleFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  changeSelect(e: any) {
-    console.log(e);
-  }
+    console.log('File name:', file.name);
+    console.log('File extension:', file.name.split('.').pop());
 
-  changeSort(e: any) {
-    console.log(e);
-  }
-
-  enableRowExpandable() {
-    this.columns[0].showExpand = this.expandable;
-  }
-
-  updateCell() {
-    this.list = this.list.map(item => {
-      item.weight = Math.round(Math.random() * 1000) / 100;
-      return item;
+    const headers = new HttpHeaders({
+      'enctype': 'multipart/form-data' // Configura el encabezado adecuadamente
     });
+
+    this.httpClient.post('http://localhost:8080/values/Import', formData, { headers }).subscribe(
+      response => {
+        console.log('File uploaded successfully:', response);
+      },
+      error => {
+        console.error('Error uploading file:', error);
+      }
+    );
   }
 
-  updateList() {
-    this.list = this.list.splice(-1).concat(this.list);
-  }
 }

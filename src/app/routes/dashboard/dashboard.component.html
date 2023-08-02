@@ -1,17 +1,54 @@
 <breadcrumb></breadcrumb>
 
-<div class="row" class="custom-card-content">
+<div class="container">
   <!-- Charts/ Traffic -->
-  <div class="col-md-7" class="custom-card-content">
-    <mat-card class="custom-card-content">
-      <mat-card-header >
-        <mat-card-title >Analisis:</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="custom-card-content">
-        <div id="chart1-container">
-          <div id="chart1"></div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <div class="row custom-card-content">
+    <div class="col-md-7">
+      <mat-card class="custom-card-content">
+        <mat-card-header>
+          <mat-card-title>Analysis:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="custom-card-content">
+          <div id="chart1-container">
+            <div id="chart1"></div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- New div for pagination buttons
+  <div class="pagination-buttons">
+    <button (click)="loadPreviousPage()" [disabled]="currentPage === 0">Página anterior</button>
+    <button (click)="loadNextPage()" [disabled]="currentPage === totalDataPages - 1">Página siguiente</button>
+  </div>-->
+
+  <!-- New div for the table -->
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Table container with adjusted size -->
+      <div id="table-container" class="table-container">
+        <!-- Table to display correlations -->
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Correlation with Upper Limit</th>
+            <th>Correlation with Lower Limit</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <!-- Use the number pipe with the format "1.2-6" to display up to 6 decimal places -->
+            <td>{{ this.correlationTagWithUpperLimit | number:'1.2-6' }}</td>
+            <td>{{ this.correlationTagWithLowerLimit | number:'1.2-6' }}</td>
+          </tr>
+          <!-- Agregar una nueva fila para mostrar el valor del punto de intersección -->
+          <tr>
+            <td colspan="2">Intersection Point Value: {{ this.intersectionPointValue }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

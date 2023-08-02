@@ -11,13 +11,7 @@ import { MAT_COLORS } from '@shared';
 export class DesignColorsComponent implements OnInit {
   colors: { key: string; value: any }[] = [];
 
-  valueAscOrder(a: KeyValue<number, string>, b: KeyValue<number, string>): number {
-    return a.value.localeCompare(b.value);
-  }
 
-  keyAscOrder(a: KeyValue<number, string>, b: KeyValue<number, string>): number {
-    return a.key - b.key;
-  }
 
   constructor() {}
 
@@ -31,7 +25,5 @@ export class DesignColorsComponent implements OnInit {
     }
   }
 
-  trackByColor(index: number, color: { key: string; value: any }): string {
-    return color.key;
-  }
+
 }
