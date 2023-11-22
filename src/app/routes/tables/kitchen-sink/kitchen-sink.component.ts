@@ -9,6 +9,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {NgxFileDropEntry} from "ngx-file-drop";
+import {DateService} from "../../../../service/date.service";
+import {RegisterDate} from "../../../../domain/registerDate";
 
 @Component({
   selector: 'app-table-kitchen-sink',
@@ -19,9 +21,11 @@ import {NgxFileDropEntry} from "ngx-file-drop";
 })
 export class TablesKitchenSinkComponent implements OnInit {
   selectedFile: File | null = null;
+  registerDate: RegisterDate = {};
+  errorMessage: string | null = null;
   constructor(
     private httpClient: HttpClient,
-    private regValueService: RegValueService
+    private regValueService: DateService
   ) {}
   ngOnInit() {
   }
@@ -80,6 +84,19 @@ export class TablesKitchenSinkComponent implements OnInit {
       },
       error => {
         console.error('Error uploading file:', error);
+      }
+    );
+  }
+
+  onSaveDate() {
+    this.regValueService.saveDate(this.registerDate).subscribe(
+      response => {
+        console.log('Datos guardados exitosamente:', response);
+        // Maneja el éxito aquí, si es necesario
+      },
+      error => {
+        console.error('Error al guardar los datos:', error);
+        this.errorMessage = 'Ocurrió un error al guardar los datos.';
       }
     );
   }

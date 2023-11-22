@@ -1,7 +1,17 @@
 <page-header class="bg-green-600"></page-header>
 
-
-
 <ngx-file-drop (onFileDrop)="onFileDropped($event)">
   Arrastra y suelta el archivo aquí
 </ngx-file-drop>
+
+<form (ngSubmit)="onSaveDate()">
+  <div>
+    <label for="date">Fecha:</label>
+    <input type="date" id="date" [(ngModel)]="registerDate.date" name="date" required>
+  </div>
+
+  <!-- Muestra el mensaje de error si hay un error -->
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <button type="submit">Guardar Fecha</button>
+</form>
